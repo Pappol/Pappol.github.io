@@ -27,13 +27,14 @@ const hue = sum % 360; // 260
     </p>
   </header>
 
-  <!-- Egg 1: the colour -->
+  <!-- Egg 1: the hidden colour -->
   <section class="egg">
-    <h2>1 · The signature colour is computed from “Pappol”</h2>
+    <h2>1 · The site is colourless — until you reveal the hidden hue</h2>
     <p class="muted">
-      “Pappol” can't be a literal hex code — <code>P</code>, <code>o</code> and
-      <code>l</code> aren't hex digits. So instead the colour is
-      <em>derived</em> from the name's character codes:
+      The whole site is deliberately monochrome. But a colour <em>is</em>
+      hidden in it, derived from my nickname. “Pappol” can't be a literal hex
+      code — <code>P</code>, <code>o</code> and <code>l</code> aren't hex
+      digits — so it's computed from the name's character codes instead:
     </p>
     <div class="calc">
       <table>
@@ -51,9 +52,10 @@ const hue = sum % 360; // 260
       </p>
     </div>
     <p class="muted">
-      Every accent, gradient and highlight on the site is built on
-      <code>hue {hue}</code>. Change the single <code>--pappol-hue</code> value in
-      the CSS and the entire site re-skins itself.
+      By default <code>hue {hue}</code> is never painted — the site stays black
+      and white. Type <code>pappol</code> anywhere (egg 3) and the
+      <code>.pappol</code> class floods every accent, link and highlight with it.
+      The hue lives in one <code>--pappol-hue</code> variable in the CSS.
     </p>
     <div class="swatch-row" aria-hidden="true">
       <span class="swatch" style={`background:hsl(${hue} 72% 55%)`}></span>
@@ -79,8 +81,9 @@ const hue = sum % 360; // 260
     <h2>3 · Type <code>pappol</code> anywhere</h2>
     <p class="muted">
       Type the six letters <code>p-a-p-p-o-l</code> on any page (not in a text
-      field) to trigger <strong>Pappol mode</strong>: confetti and a full
-      hue-spin of the site's colour, settling back to {hue}°.
+      field) to trigger <strong>Pappol mode</strong>: confetti, a one-off
+      hue-sweep, and the hidden colour ({hue}°) flooding the whole monochrome
+      site. It stays until you reload.
     </p>
     <button class="btn btn--primary" id="try-pappol" type="button">Try it now</button>
   </section>

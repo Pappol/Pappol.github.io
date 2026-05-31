@@ -10,7 +10,6 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
 
 <BaseLayout title="Blog" description="All articles by Riccardo Parola.">
   <header class="page-head">
-    <p class="eyebrow">Writing</p>
     <h1>Blog</h1>
     <p class="muted">Everything I've published, newest first.</p>
   </header>
@@ -23,18 +22,28 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
         {posts.map((p) => (
           <li class="post-list-item">
             <a href={`/blog/${p.id}/`} class="post-list-link">
-              <div class="post-list-meta">
-                <FormattedDate date={p.data.pubDate} />
-              </div>
               <div class="post-list-body">
+                <p class="post-list-meta">
+                  <FormattedDate date={p.data.pubDate} />
+                  {p.data.tags.slice(0, 2).map((t) => (
+                    <>
+                      <span class="dot">·</span>
+                      <span class="tag">{t}</span>
+                    </>
+                  ))}
+                </p>
                 <h2 class="post-list-title">{p.data.title}</h2>
                 <p class="muted post-list-desc">{p.data.description}</p>
-                <div class="post-list-tags">
-                  {p.data.tags.map((t) => (
-                    <span class="tag">{t}</span>
-                  ))}
-                </div>
               </div>
+              {p.data.heroImage && (
+                <div class="post-list-thumb">
+                  <img
+                    src={p.data.heroImage}
+                    alt={p.data.heroImageAlt ?? ''}
+                    loading="lazy"
+                  />
+                </div>
+              )}
             </a>
           </li>
         ))}
@@ -45,10 +54,10 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
 
 <style>
   .page-head {
-    margin-bottom: 2.5rem;
+    margin-bottom: 3rem;
   }
   .page-head h1 {
-    margin: 0.3rem 0 0.4rem;
+    margin: 0 0 0.5rem;
   }
   .post-list {
     list-style: none;
@@ -57,43 +66,69 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
     display: flex;
     flex-direction: column;
   }
-  .post-list-item + .post-list-item {
+  .post-list-item {
     border-top: 1px solid var(--border);
   }
+  .post-list-item:last-child {
+    border-bottom: 1px solid var(--border);
+  }
   .post-list-link {
-    display: grid;
-    grid-template-columns: 8rem 1fr;
-    gap: 1.2rem;
-    padding: 1.4rem 0.5rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.6rem 0;
     text-decoration: none;
     color: inherit;
-    border-radius: var(--radius-sm);
-    transition: background var(--t-fast) var(--ease-pappol);
   }
   .post-list-link:hover {
-    background: var(--bg-soft);
+    opacity: 1;
+  }
+  .post-list-link:hover .post-list-title {
+    color: var(--text-soft);
+  }
+  .post-list-body {
+    min-width: 0;
   }
   .post-list-meta {
-    color: var(--text-soft);
-    font-size: 0.9rem;
-    padding-top: 0.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin: 0 0 0.5rem;
+    color: var(--text-faint);
+    font-size: 0.8rem;
+  }
+  .post-list-meta .dot {
+    opacity: 0.6;
   }
   .post-list-title {
-    margin: 0 0 0.3rem;
-    font-size: 1.3rem;
+    margin: 0 0 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 550;
+    transition: color var(--t-fast) var(--ease-pappol);
   }
   .post-list-desc {
-    margin: 0 0 0.6rem;
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
   }
-  .post-list-tags {
-    display: flex;
-    gap: 0.4rem;
-    flex-wrap: wrap;
+  .post-list-thumb {
+    flex: none;
+    width: 132px;
+    height: 88px;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    border: 1px solid var(--border);
   }
-  @media (max-width: 38rem) {
-    .post-list-link {
-      grid-template-columns: 1fr;
-      gap: 0.4rem;
+  .post-list-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  @media (max-width: 32rem) {
+    .post-list-thumb {
+      display: none;
     }
   }
 </style>

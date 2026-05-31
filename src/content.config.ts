@@ -10,6 +10,11 @@ const blog = defineCollection({
     updatedDate: z.coerce.date().optional(),
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
+    // Optional thumbnail / hero image. A path under /public (e.g.
+    // "/images/posts/foo.jpg") or a remote URL. Rendered when present,
+    // gracefully omitted when absent.
+    heroImage: z.string().optional(),
+    heroImageAlt: z.string().optional(),
   }),
 });
 
