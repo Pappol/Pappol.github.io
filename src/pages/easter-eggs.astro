@@ -1,0 +1,147 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Document the maths so the eggs are reproducible.
+const letters = [
+  ['P', 80],
+  ['a', 97],
+  ['p', 112],
+  ['p', 112],
+  ['o', 111],
+  ['l', 108],
+];
+const sum = letters.reduce((acc, [, n]) => acc + (n as number), 0); // 620
+const hue = sum % 360; // 260
+---
+
+<BaseLayout
+  title="Easter Eggs"
+  description="The hidden things built into this site, and the maths behind them."
+>
+  <header class="page-head">
+    <p class="eyebrow">You found it</p>
+    <h1>Easter eggs</h1>
+    <p class="muted">
+      The whole site is quietly built around my nickname, <strong>Pappol</strong>.
+      Here's everything that's hidden, and the maths behind it.
+    </p>
+  </header>
+
+  <!-- Egg 1: the colour -->
+  <section class="egg">
+    <h2>1 · The signature colour is computed from “Pappol”</h2>
+    <p class="muted">
+      “Pappol” can't be a literal hex code — <code>P</code>, <code>o</code> and
+      <code>l</code> aren't hex digits. So instead the colour is
+      <em>derived</em> from the name's character codes:
+    </p>
+    <div class="calc">
+      <table>
+        <thead><tr><th>Letter</th>{letters.map(([l]) => <th>{l}</th>)}<th>Σ</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="muted">ASCII</td>
+            {letters.map(([, n]) => <td>{n}</td>)}
+            <td><strong>{sum}</strong></td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="formula">
+        <code>{sum} mod 360 = {hue}°</code> → hue <strong>{hue}°</strong> → indigo.
+      </p>
+    </div>
+    <p class="muted">
+      Every accent, gradient and highlight on the site is built on
+      <code>hue {hue}</code>. Change the single <code>--pappol-hue</code> value in
+      the CSS and the entire site re-skins itself.
+    </p>
+    <div class="swatch-row" aria-hidden="true">
+      <span class="swatch" style={`background:hsl(${hue} 72% 55%)`}></span>
+      <span class="swatch" style={`background:hsl(${hue} 80% 74%)`}></span>
+      <span class="swatch" style={`background:hsl(${hue} 72% 46%)`}></span>
+    </div>
+  </section>
+
+  <!-- Egg 2: timing -->
+  <section class="egg">
+    <h2>2 · The animation timing comes from “Pappol” too</h2>
+    <p class="muted">
+      The same sum drives motion. <code>{sum} → 0.{sum}</code> gives the easing
+      curve <code>cubic-bezier(0.62, 0, 0.38, 1)</code> (with
+      <code>0.38 = 1 − 0.62</code>), and the base transition duration is
+      <code>{hue}ms</code> — the hue value, reused as milliseconds. Hover any
+      card or button to feel it.
+    </p>
+  </section>
+
+  <!-- Egg 3: type pappol -->
+  <section class="egg">
+    <h2>3 · Type <code>pappol</code> anywhere</h2>
+    <p class="muted">
+      Type the six letters <code>p-a-p-p-o-l</code> on any page (not in a text
+      field) to trigger <strong>Pappol mode</strong>: confetti and a full
+      hue-spin of the site's colour, settling back to {hue}°.
+    </p>
+    <button class="btn btn--primary" id="try-pappol" type="button">Try it now</button>
+  </section>
+
+  <!-- Egg 4: console -->
+  <section class="egg">
+    <h2>4 · A message in the developer console</h2>
+    <p class="muted">
+      Open your browser's DevTools console on any page and there's a styled
+      greeting waiting — with a nudge toward this very page.
+    </p>
+  </section>
+
+  <!-- Egg 5: hidden door -->
+  <section class="egg">
+    <h2>5 · The hidden door</h2>
+    <p class="muted">
+      This page isn't in the menu. There are two ways in: typing
+      <code>pappol</code> (egg 3) shows a link, and the little full-stop after
+      my name in the footer — <code>© … Riccardo Parola<strong>.</strong></code>
+      — is secretly a link here.
+    </p>
+  </section>
+
+  <p class="muted closing">More may appear over time. Keep poking around. 👀</p>
+</BaseLayout>
+
+<script>
+  document.getElementById('try-pappol')?.addEventListener('click', () => {
+    // @ts-ignore - exposed by /scripts/easter-eggs.js
+    if (window.__pappolMode) window.__pappolMode();
+  });
+</script>
+
+<style>
+  .page-head { margin-bottom: 2.5rem; }
+  .page-head h1 { margin: 0.3rem 0 0.5rem; }
+  .egg {
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--border);
+  }
+  .egg h2 { font-size: 1.25rem; margin: 0 0 0.6rem; }
+  .calc {
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1rem 1.2rem;
+    margin: 1rem 0;
+    overflow-x: auto;
+  }
+  .calc table { border-collapse: collapse; font-family: var(--font-mono); font-size: 0.9rem; }
+  .calc th, .calc td {
+    padding: 0.3rem 0.7rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .formula { margin: 0.8rem 0 0; }
+  .swatch-row { display: flex; gap: 0.6rem; margin-top: 1rem; }
+  .swatch {
+    width: 48px; height: 48px; border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .closing { margin-top: 2.5rem; }
+</style>

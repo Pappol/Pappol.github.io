@@ -1,0 +1,301 @@
+/* =====================================================================
+   Pappol blog — global design system
+   Minimal, snappy, light + dark.
+
+   EASTER EGG #1 — the signature colour is derived from the nickname:
+     "Pappol" -> ASCII 80 + 97 + 112 + 112 + 111 + 108 = 620
+     620 mod 360 = 260  ->  hue 260deg  ->  indigo / violet
+   Every accent on the site is built on hue 260.
+
+   EASTER EGG #2 — motion is also derived from "Pappol":
+     sum 620 -> 0.620 -> transition base = 260ms (the hue, in ms)
+     ease = cubic-bezier(0.62, 0, 0.38, 1)   (0.62 from 620/1000, 0.38 = 1 - 0.62)
+   ===================================================================== */
+
+:root {
+  /* The Pappol hue. Change this one number to re-skin the whole site. */
+  --pappol-hue: 260;
+
+  /* Motion derived from the nickname */
+  --t-base: 260ms;
+  --t-fast: 130ms;
+  --ease-pappol: cubic-bezier(0.62, 0, 0.38, 1);
+
+  /* Type + layout */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "Fira Code", Menlo,
+    Consolas, monospace;
+  --content-width: 44rem;
+  --wide-width: 60rem;
+  --radius: 14px;
+  --radius-sm: 9px;
+}
+
+/* ---------- Light theme (default) ---------- */
+:root,
+:root[data-theme='light'] {
+  --bg: hsl(var(--pappol-hue) 30% 99%);
+  --bg-soft: hsl(var(--pappol-hue) 28% 96%);
+  --surface: hsl(0 0% 100%);
+  --border: hsl(var(--pappol-hue) 18% 88%);
+  --text: hsl(var(--pappol-hue) 25% 12%);
+  --text-soft: hsl(var(--pappol-hue) 12% 40%);
+  --accent: hsl(var(--pappol-hue) 72% 55%);
+  --accent-strong: hsl(var(--pappol-hue) 72% 46%);
+  --accent-contrast: #ffffff;
+  --accent-wash: hsl(var(--pappol-hue) 72% 55% / 0.10);
+  --shadow: 0 1px 2px hsl(var(--pappol-hue) 20% 20% / 0.05),
+    0 8px 24px hsl(var(--pappol-hue) 30% 20% / 0.06);
+}
+
+/* ---------- Dark theme ---------- */
+:root[data-theme='dark'] {
+  --bg: hsl(var(--pappol-hue) 24% 8%);
+  --bg-soft: hsl(var(--pappol-hue) 22% 12%);
+  --surface: hsl(var(--pappol-hue) 20% 13%);
+  --border: hsl(var(--pappol-hue) 16% 24%);
+  --text: hsl(var(--pappol-hue) 18% 93%);
+  --text-soft: hsl(var(--pappol-hue) 12% 66%);
+  --accent: hsl(var(--pappol-hue) 80% 74%);
+  --accent-strong: hsl(var(--pappol-hue) 85% 80%);
+  --accent-contrast: hsl(var(--pappol-hue) 30% 10%);
+  --accent-wash: hsl(var(--pappol-hue) 80% 74% / 0.12);
+  --shadow: 0 1px 2px hsl(0 0% 0% / 0.4), 0 10px 30px hsl(0 0% 0% / 0.35);
+}
+
+/* ---------- Reset-ish ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 1.05rem;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background var(--t-base) var(--ease-pappol),
+    color var(--t-base) var(--ease-pappol);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: var(--accent-strong);
+  text-decoration-color: var(--accent-wash);
+  text-underline-offset: 3px;
+  transition: color var(--t-fast) var(--ease-pappol);
+}
+a:hover {
+  color: var(--accent);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+h1 {
+  font-size: clamp(2rem, 1.4rem + 2.6vw, 2.9rem);
+}
+h2 {
+  font-size: clamp(1.4rem, 1.1rem + 1.2vw, 1.8rem);
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--bg-soft);
+  padding: 0.15em 0.4em;
+  border-radius: 6px;
+}
+pre {
+  padding: 1rem 1.1rem;
+  border-radius: var(--radius-sm);
+  overflow-x: auto;
+  border: 1px solid var(--border);
+}
+pre code {
+  background: none;
+  padding: 0;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2.5rem 0;
+}
+
+blockquote {
+  margin: 1.5rem 0;
+  padding: 0.4rem 1.2rem;
+  border-left: 3px solid var(--accent);
+  color: var(--text-soft);
+  font-style: italic;
+}
+
+/* ---------- Layout helpers ---------- */
+.container {
+  width: 100%;
+  max-width: var(--content-width);
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+.container--wide {
+  max-width: var(--wide-width);
+}
+main {
+  padding-block: 2.5rem 4rem;
+}
+.section {
+  margin-block: 3.5rem;
+}
+.muted {
+  color: var(--text-soft);
+}
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent-strong);
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 1.1rem;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+  transition: transform var(--t-fast) var(--ease-pappol),
+    background var(--t-fast) var(--ease-pappol),
+    border-color var(--t-fast) var(--ease-pappol);
+}
+.btn:hover {
+  transform: translateY(-1px);
+  border-color: var(--accent);
+}
+.btn--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+}
+.btn--primary:hover {
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
+  color: var(--accent-contrast);
+}
+
+/* ---------- Cards ---------- */
+.card {
+  display: block;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.3rem 1.4rem;
+  text-decoration: none;
+  color: inherit;
+  transition: transform var(--t-base) var(--ease-pappol),
+    border-color var(--t-base) var(--ease-pappol),
+    box-shadow var(--t-base) var(--ease-pappol);
+}
+.card:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+  box-shadow: var(--shadow);
+}
+
+/* ---------- Tags / pills ---------- */
+.tag {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent-strong);
+  background: var(--accent-wash);
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+}
+
+/* ---------- Accessibility ---------- */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+.skip-link {
+  position: absolute;
+  left: 0.5rem;
+  top: -3rem;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--radius-sm);
+  z-index: 100;
+  transition: top var(--t-fast) var(--ease-pappol);
+}
+.skip-link:focus {
+  top: 0.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- Prose (article body) ---------- */
+.prose :where(p, ul, ol, blockquote, pre, table) {
+  margin-block: 1.1rem;
+}
+.prose :where(h2, h3) {
+  margin-top: 2.2rem;
+}
+.prose img {
+  border-radius: var(--radius-sm);
+  margin-block: 1.5rem;
+}
+.prose ul,
+.prose ol {
+  padding-left: 1.4rem;
+}
+.prose li {
+  margin-block: 0.35rem;
+}

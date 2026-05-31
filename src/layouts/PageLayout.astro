@@ -1,0 +1,23 @@
+---
+import BaseLayout from './BaseLayout.astro';
+// Used by Markdown pages (about.md, privacy.md). Astro passes the markdown
+// frontmatter in as `frontmatter`.
+const { frontmatter } = Astro.props;
+const title = frontmatter?.title;
+const description = frontmatter?.description;
+---
+<BaseLayout title={title} description={description}>
+  <article class="prose page-prose">
+    <slot />
+  </article>
+</BaseLayout>
+
+<style>
+  .page-prose {
+    max-width: var(--content-width);
+    margin-inline: auto;
+  }
+  .page-prose :global(h1) {
+    margin-bottom: 0.6rem;
+  }
+</style>

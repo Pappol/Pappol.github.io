@@ -1,0 +1,81 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+import { NAV_LINKS, NICKNAME } from '../consts';
+const path = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === '/' ? path === '/' : path.startsWith(href);
+---
+<header class="site-header">
+  <nav class="container container--wide nav" aria-label="Primary">
+    <a href="/" class="brand" aria-label="Home">
+      {NICKNAME}<span class="brand-dot" aria-hidden="true">.</span>
+    </a>
+    <div class="nav-links">
+      {NAV_LINKS.map((l) => (
+        <a href={l.href} class={isActive(l.href) ? 'nav-link is-active' : 'nav-link'}>
+          {l.label}
+        </a>
+      ))}
+      <ThemeToggle />
+    </div>
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--bg) 80%, transparent);
+    backdrop-filter: saturate(1.4) blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-block: 0.7rem;
+  }
+  .brand {
+    font-weight: 800;
+    font-size: 1.3rem;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    text-decoration: none;
+  }
+  /* The brand dot is the hidden door to the easter-egg page (egg #5).
+     It looks like ordinary punctuation. */
+  .brand-dot {
+    color: var(--accent);
+    transition: color var(--t-fast) var(--ease-pappol);
+  }
+  .brand:hover .brand-dot {
+    color: var(--accent-strong);
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .nav-link {
+    padding: 0.4rem 0.7rem;
+    border-radius: 8px;
+    color: var(--text-soft);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: color var(--t-fast) var(--ease-pappol),
+      background var(--t-fast) var(--ease-pappol);
+  }
+  .nav-link:hover {
+    color: var(--text);
+    background: var(--bg-soft);
+  }
+  .nav-link.is-active {
+    color: var(--accent-strong);
+    background: var(--accent-wash);
+  }
+  @media (max-width: 30rem) {
+    .nav-link { padding-inline: 0.5rem; }
+  }
+</style>

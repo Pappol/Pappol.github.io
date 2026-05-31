@@ -1,0 +1,135 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import EmailSignup from '../components/EmailSignup.astro';
+import { SOCIALS, NICKNAME } from '../consts';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+const recent = posts.slice(0, 3);
+---
+
+<BaseLayout wide>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-text">
+      <p class="eyebrow">Hi, I'm Riccardo — aka {NICKNAME}</p>
+      <h1>I build the systems between raw data and useful intelligence.</h1>
+      <p class="hero-bio muted">
+        <!-- TODO Riccardo: replace this with your own short description. -->
+        Associate AI &amp; Data Engineer at PwC in Trento. I write about AI
+        engineering, data pipelines, and getting machine learning to behave in
+        production.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn--primary" href="/blog">Read the blog</a>
+        <a class="btn" href={SOCIALS.github} target="_blank" rel="me noopener">GitHub</a>
+        <a class="btn" href={SOCIALS.linkedin} target="_blank" rel="me noopener">LinkedIn</a>
+      </div>
+    </div>
+    <div class="hero-photo">
+      <!-- TODO Riccardo: drop your photo in /public/images/ and update src below.
+           A square image (e.g. 600x600) works best. -->
+      <img
+        src="/images/profile-placeholder.svg"
+        alt="Riccardo Parola"
+        width="320"
+        height="320"
+      />
+    </div>
+  </section>
+
+  <!-- RECENT WRITING -->
+  <section class="section">
+    <div class="section-head">
+      <h2>Recent writing</h2>
+      <a class="see-all" href="/blog">All posts →</a>
+    </div>
+    {
+      recent.length === 0 ? (
+        <p class="muted">No posts yet — check back soon.</p>
+      ) : (
+        <div class="post-grid">
+          {recent.map((p) => (
+            <PostCard
+              href={`/blog/${p.slug}/`}
+              title={p.data.title}
+              description={p.data.description}
+              pubDate={p.data.pubDate}
+              tags={p.data.tags}
+            />
+          ))}
+        </div>
+      )
+    }
+  </section>
+
+  <!-- EMAIL -->
+  <section class="section">
+    <EmailSignup />
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    display: grid;
+    grid-template-columns: 1.4fr 0.9fr;
+    gap: 2.5rem;
+    align-items: center;
+    padding-block: 1.5rem 1rem;
+  }
+  .hero h1 {
+    margin: 0.6rem 0 1rem;
+  }
+  .hero-bio {
+    font-size: 1.12rem;
+    max-width: 34rem;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+    margin-top: 1.4rem;
+  }
+  .hero-photo {
+    justify-self: center;
+  }
+  .hero-photo img {
+    width: min(320px, 70vw);
+    height: auto;
+    aspect-ratio: 1;
+    border-radius: 20px;
+    object-fit: cover;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.3rem;
+  }
+  .see-all {
+    font-weight: 600;
+    font-size: 0.95rem;
+    white-space: nowrap;
+  }
+  .post-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: 1.1rem;
+  }
+  @media (max-width: 48rem) {
+    .hero {
+      grid-template-columns: 1fr;
+      text-align: left;
+    }
+    .hero-photo {
+      order: -1;
+      justify-self: start;
+    }
+  }
+</style>

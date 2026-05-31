@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="404" description="Page not found.">
+  <section class="notfound">
+    <p class="eyebrow">Error 404 · hue 260</p>
+    <h1>This page wandered off.</h1>
+    <p class="muted">
+      The link is broken or the page never existed. (Psst — try typing
+      <code>pappol</code> while you're here.)
+    </p>
+    <div class="actions">
+      <a class="btn btn--primary" href="/">Go home</a>
+      <a class="btn" href="/blog">Read the blog</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .notfound { padding-block: 3rem; max-width: 36rem; }
+  .notfound h1 { margin: 0.4rem 0 0.8rem; }
+  .actions { display: flex; gap: 0.7rem; margin-top: 1.6rem; flex-wrap: wrap; }
+</style>

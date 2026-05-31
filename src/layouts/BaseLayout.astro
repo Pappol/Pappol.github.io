@@ -1,0 +1,65 @@
+---
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import '../styles/global.css';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  wide?: boolean;
+}
+
+const {
+  title,
+  description = SITE_DESCRIPTION,
+  wide = false,
+} = Astro.props;
+
+const pageTitle = title ? `${title} · ${SITE_TITLE}` : `${SITE_TITLE} — Riccardo Parola`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonical} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title={SITE_TITLE} href="/rss.xml" />
+
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+
+    <!-- Open Graph / social -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- No-flash theme: set the theme BEFORE first paint -->
+    <script is:inline>
+      (() => {
+        const saved = localStorage.getItem('theme');
+        const sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = saved || (sysDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <Nav />
+    <main id="main" class={wide ? 'container container--wide' : 'container'}>
+      <slot />
+    </main>
+    <Footer />
+
+    <!-- Easter eggs: console greeting + type "pappol" -->
+    <script src="/scripts/easter-eggs.js" defer></script>
+  </body>
+</html>

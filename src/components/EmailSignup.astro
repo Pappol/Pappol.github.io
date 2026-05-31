@@ -1,0 +1,147 @@
+---
+// GDPR-friendly subscribe form.
+// - Explicit, non-pre-ticked consent checkbox (Art. 6(1)(a) consent)
+// - Links to the privacy policy
+// - Built for double opt-in providers (e.g. MailerLite, EU-based)
+//
+// HOW TO CONNECT A PROVIDER (no backend needed):
+//   1. Create a form in MailerLite (or similar) with double opt-in ON.
+//   2. Set ACTION below to the provider's POST endpoint and adjust field
+//      names if required. Until then the form runs in demo mode and just
+//      shows a confirmation message without sending anything.
+const ACTION = ''; // e.g. "https://assets.mailerlite.com/jsonp/XX123/forms/.../subscribe"
+---
+<section class="signup" aria-labelledby="signup-title">
+  <div class="signup-inner">
+    <h2 id="signup-title">Get new posts by email</h2>
+    <p class="muted">
+      No spam — just an email when I publish something new. You can unsubscribe in one click.
+    </p>
+
+    <form
+      class="signup-form"
+      id="signup-form"
+      method="post"
+      action={ACTION}
+      data-demo={ACTION ? 'false' : 'true'}
+      novalidate
+    >
+      <div class="field-row">
+        <label class="sr-only" for="email">Email address</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          inputmode="email"
+          autocomplete="email"
+          placeholder="you@example.com"
+          required
+        />
+        <button class="btn btn--primary" type="submit">Subscribe</button>
+      </div>
+
+      <label class="consent">
+        <input type="checkbox" id="consent" name="consent" required />
+        <span>
+          I consent to receiving new-post emails and I have read the
+          <a href="/privacy">privacy policy</a>. (You'll get a confirmation
+          email to opt in — double opt-in.)
+        </span>
+      </label>
+
+      <p class="form-msg" id="form-msg" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+<style>
+  .signup {
+    background: var(--accent-wash);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.8rem;
+  }
+  .signup h2 {
+    margin: 0 0 0.3rem;
+  }
+  .signup-form {
+    margin-top: 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+  .field-row {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+  .field-row input {
+    flex: 1 1 14rem;
+    font: inherit;
+    padding: 0.6rem 0.85rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+  }
+  .field-row input:focus-visible {
+    border-color: var(--accent);
+  }
+  .consent {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+    font-size: 0.88rem;
+    color: var(--text-soft);
+    line-height: 1.5;
+  }
+  .consent input {
+    margin-top: 0.2rem;
+    width: 1.05rem;
+    height: 1.05rem;
+    accent-color: var(--accent);
+    flex: none;
+  }
+  .form-msg {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    min-height: 1.2em;
+  }
+  .form-msg.ok { color: var(--accent-strong); }
+  .form-msg.err { color: #d6336c; }
+</style>
+
+<script>
+  const form = document.getElementById('signup-form') as HTMLFormElement | null;
+  const msg = document.getElementById('form-msg');
+  const isDemo = form?.dataset.demo === 'true';
+
+  form?.addEventListener('submit', (e) => {
+    const email = (document.getElementById('email') as HTMLInputElement)?.value.trim();
+    const consent = (document.getElementById('consent') as HTMLInputElement)?.checked;
+    const valid = !!email && /\S+@\S+\.\S+/.test(email);
+
+    if (!msg) return;
+    if (!valid) {
+      e.preventDefault();
+      msg.textContent = 'Please enter a valid email address.';
+      msg.className = 'form-msg err';
+      return;
+    }
+    if (!consent) {
+      e.preventDefault();
+      msg.textContent = 'Please tick the consent box so I can email you.';
+      msg.className = 'form-msg err';
+      return;
+    }
+    if (isDemo) {
+      // No provider wired yet — confirm locally without sending anything.
+      e.preventDefault();
+      msg.textContent = 'Thanks! (Demo mode — connect a provider to go live.)';
+      msg.className = 'form-msg ok';
+      form.reset();
+    }
+    // If a provider ACTION is set, the form submits normally (double opt-in).
+  });
+</script>

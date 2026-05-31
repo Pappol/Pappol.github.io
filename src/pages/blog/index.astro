@@ -1,0 +1,99 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<BaseLayout title="Blog" description="All articles by Riccardo Parola.">
+  <header class="page-head">
+    <p class="eyebrow">Writing</p>
+    <h1>Blog</h1>
+    <p class="muted">Everything I've published, newest first.</p>
+  </header>
+
+  {
+    posts.length === 0 ? (
+      <p class="muted">No posts yet — check back soon.</p>
+    ) : (
+      <ul class="post-list">
+        {posts.map((p) => (
+          <li class="post-list-item">
+            <a href={`/blog/${p.slug}/`} class="post-list-link">
+              <div class="post-list-meta">
+                <FormattedDate date={p.data.pubDate} />
+              </div>
+              <div class="post-list-body">
+                <h2 class="post-list-title">{p.data.title}</h2>
+                <p class="muted post-list-desc">{p.data.description}</p>
+                <div class="post-list-tags">
+                  {p.data.tags.map((t) => (
+                    <span class="tag">{t}</span>
+                  ))}
+                </div>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .page-head {
+    margin-bottom: 2.5rem;
+  }
+  .page-head h1 {
+    margin: 0.3rem 0 0.4rem;
+  }
+  .post-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .post-list-item + .post-list-item {
+    border-top: 1px solid var(--border);
+  }
+  .post-list-link {
+    display: grid;
+    grid-template-columns: 8rem 1fr;
+    gap: 1.2rem;
+    padding: 1.4rem 0.5rem;
+    text-decoration: none;
+    color: inherit;
+    border-radius: var(--radius-sm);
+    transition: background var(--t-fast) var(--ease-pappol);
+  }
+  .post-list-link:hover {
+    background: var(--bg-soft);
+  }
+  .post-list-meta {
+    color: var(--text-soft);
+    font-size: 0.9rem;
+    padding-top: 0.2rem;
+  }
+  .post-list-title {
+    margin: 0 0 0.3rem;
+    font-size: 1.3rem;
+  }
+  .post-list-desc {
+    margin: 0 0 0.6rem;
+  }
+  .post-list-tags {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+  @media (max-width: 38rem) {
+    .post-list-link {
+      grid-template-columns: 1fr;
+      gap: 0.4rem;
+    }
+  }
+</style>
