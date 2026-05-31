@@ -27,8 +27,8 @@ jobs:
       - name: Build with Astro
         uses: withastro/action@v3
         with:
-          # No lockfile is committed, so tell the action to use npm.
           package-manager: npm@latest
+          node-version: 22
         # Runs: npm install + npm run build, uploads ./dist
 
   deploy:
