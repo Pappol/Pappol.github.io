@@ -10,7 +10,7 @@
   /* ---- Egg: console greeting ---- */
   const c = 'color:#fff;background:hsl(260 72% 55%);padding:3px 8px;border-radius:6px;font-weight:700';
   console.log('%cPappol', c, 'you found the console. There are more eggs at /easter-eggs 👀');
-  console.log('Tip: type "pappol" anywhere on the page.');
+  console.log('This site is intentionally colourless. Tip: type "pappol" anywhere to reveal the hidden hue.');
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -89,10 +89,15 @@
     if (active) return;
     active = true;
     const root = document.documentElement;
+    // The site is monochrome by default. Reveal the hidden colour (hue 260)
+    // by adding the `.pappol` class — see :root.pappol in global.css. The
+    // colour stays until the next page load.
+    root.classList.add('pappol');
     confetti();
-    toast('🎉 Pappol mode! (see /easter-eggs)');
+    toast('✨ Pappol mode — colour revealed (hue 260)');
     if (!reduceMotion) {
-      // Spin the signature hue through a full rotation, then settle back.
+      // Sweep the revealed hue through a full rotation once, then settle back
+      // to the signature 260. (The `.pappol` class above keeps colour on.)
       let start;
       const base = 260;
       const dur = 2600;

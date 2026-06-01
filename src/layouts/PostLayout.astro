@@ -7,8 +7,18 @@ export interface Props {
   pubDate: Date;
   updatedDate?: Date;
   tags?: string[];
+  heroImage?: string;
+  heroImageAlt?: string;
 }
-const { title, description, pubDate, updatedDate, tags = [] } = Astro.props;
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  tags = [],
+  heroImage,
+  heroImageAlt,
+} = Astro.props;
 ---
 <BaseLayout title={title} description={description}>
   <article class="post">
@@ -25,6 +35,10 @@ const { title, description, pubDate, updatedDate, tags = [] } = Astro.props;
         </div>
       )}
     </header>
+
+    {heroImage && (
+      <img class="post-hero" src={heroImage} alt={heroImageAlt ?? ''} />
+    )}
 
     <div class="prose">
       <slot />
@@ -54,8 +68,16 @@ const { title, description, pubDate, updatedDate, tags = [] } = Astro.props;
   }
   .post-tags {
     display: flex;
-    gap: 0.4rem;
+    gap: 0.8rem;
     flex-wrap: wrap;
+  }
+  .post-hero {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    margin-bottom: 2.5rem;
   }
   .post-footer {
     margin-top: 3rem;

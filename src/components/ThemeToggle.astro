@@ -3,7 +3,7 @@
 // BaseLayout applies the saved theme before paint.
 ---
 <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle colour theme" title="Toggle theme">
-  <svg class="icon icon-sun" viewBox="0 0 24 24" aria-hidden="true" width="20" height="20">
+  <svg class="icon icon-sun" viewBox="0 0 24 24" aria-hidden="true">
     <circle cx="12" cy="12" r="4.5" fill="currentColor" />
     <g stroke="currentColor" stroke-width="2" stroke-linecap="round">
       <line x1="12" y1="2" x2="12" y2="4.5" />
@@ -16,7 +16,7 @@
       <line x1="17.6" y1="6.4" x2="19.4" y2="4.6" />
     </g>
   </svg>
-  <svg class="icon icon-moon" viewBox="0 0 24 24" aria-hidden="true" width="20" height="20">
+  <svg class="icon icon-moon" viewBox="0 0 24 24" aria-hidden="true">
     <path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.5 6.5 0 0 0 9.8 9.8z" fill="currentColor" />
   </svg>
 </button>
@@ -25,22 +25,27 @@
   .theme-toggle {
     display: inline-grid;
     place-items: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--text);
+    width: 34px;
+    height: 34px;
+    margin-right: -0.4rem;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    color: var(--text-soft);
     cursor: pointer;
-    transition: transform var(--t-fast) var(--ease-pappol),
-      border-color var(--t-fast) var(--ease-pappol);
+    transition: color var(--t-fast) var(--ease-pappol),
+      transform var(--t-fast) var(--ease-pappol);
   }
   .theme-toggle:hover {
-    transform: translateY(-1px);
-    border-color: var(--accent);
+    color: var(--text);
+  }
+  .theme-toggle:active {
+    transform: scale(0.9);
   }
   .theme-toggle .icon {
     grid-area: 1 / 1;
+    width: 18px;
+    height: 18px;
     transition: opacity var(--t-fast) var(--ease-pappol),
       transform var(--t-base) var(--ease-pappol);
   }
@@ -48,7 +53,7 @@
   :root[data-theme='light'] .icon-sun { opacity: 0; transform: rotate(-90deg) scale(0.6); }
   :root[data-theme='light'] .icon-moon { opacity: 1; }
   :root[data-theme='dark'] .icon-moon { opacity: 0; transform: rotate(90deg) scale(0.6); }
-  :root[data-theme='dark'] .icon-sun { opacity: 1; color: hsl(45 90% 65%); }
+  :root[data-theme='dark'] .icon-sun { opacity: 1; }
 </style>
 
 <script>

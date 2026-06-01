@@ -26,56 +26,47 @@ const isActive = (href: string) =>
     position: sticky;
     top: 0;
     z-index: 50;
-    background: color-mix(in srgb, var(--bg) 80%, transparent);
-    backdrop-filter: saturate(1.4) blur(10px);
-    border-bottom: 1px solid var(--border);
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: saturate(1.2) blur(8px);
   }
   .nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-block: 0.7rem;
+    padding-block: 1.4rem;
   }
   .brand {
-    font-weight: 800;
-    font-size: 1.3rem;
-    letter-spacing: -0.03em;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: -0.02em;
     color: var(--text);
     text-decoration: none;
   }
-  /* The brand dot is the hidden door to the easter-egg page (egg #5).
-     It looks like ordinary punctuation. */
-  .brand-dot {
-    color: var(--accent);
-    transition: color var(--t-fast) var(--ease-pappol);
+  .brand:hover {
+    opacity: 1;
   }
-  .brand:hover .brand-dot {
-    color: var(--accent-strong);
+  /* The brand dot stays monochrome — it simply inherits the ink colour. */
+  .brand-dot {
+    color: inherit;
   }
   .nav-links {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 1.6rem;
   }
   .nav-link {
-    padding: 0.4rem 0.7rem;
-    border-radius: 8px;
     color: var(--text-soft);
     text-decoration: none;
-    font-weight: 600;
-    font-size: 0.95rem;
-    transition: color var(--t-fast) var(--ease-pappol),
-      background var(--t-fast) var(--ease-pappol);
+    font-weight: 400;
+    font-size: 0.92rem;
+    transition: color var(--t-fast) var(--ease-pappol);
   }
-  .nav-link:hover {
-    color: var(--text);
-    background: var(--bg-soft);
-  }
+  .nav-link:hover,
   .nav-link.is-active {
-    color: var(--accent-strong);
-    background: var(--accent-wash);
+    color: var(--text);
+    opacity: 1;
   }
   @media (max-width: 30rem) {
-    .nav-link { padding-inline: 0.5rem; }
+    .nav-links { gap: 1.1rem; }
   }
 </style>
