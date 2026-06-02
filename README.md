@@ -12,17 +12,8 @@ Public to read, only you can edit (you own the repo). Articles are plain Markdow
 - **Home** (`/`) — photo, short bio, social links, 3 most-recent posts, GDPR email signup.
 - **Blog** (`/blog`) — every article, newest first.
 - **About** (`/about`).
-- **Easter Eggs** (`/easter-eggs`) — hidden; documents every egg (see below).
 - **Privacy** (`/privacy`) — GDPR-compliant policy for the newsletter.
 - Plus a custom **404**, an **RSS feed** (`/rss.xml`) and a **sitemap**.
-
-## The "Pappol" easter eggs
-
-1. **Signature colour** — `Pappol` → ASCII `80+97+112+112+111+108 = 620`, `620 mod 360 = 260°` → indigo. The whole palette is built on `--pappol-hue: 260`. Change that one number to re-skin everything.
-2. **Motion** — same sum drives the easing `cubic-bezier(0.62, 0, 0.38, 1)` and a `260ms` base duration.
-3. **Type `pappol`** anywhere → confetti + a full hue-spin ("Pappol mode").
-4. **Console greeting** in DevTools on every page.
-5. **Hidden door** — the page isn't in the menu; the full-stop after your name in the footer links to it.
 
 ---
 
