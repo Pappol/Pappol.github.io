@@ -1,6 +1,7 @@
 ---
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import SuggestPostModal from '../components/SuggestPostModal.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import '@fontsource-variable/inter';
 import '../styles/global.css';
@@ -59,6 +60,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       <slot />
     </main>
     <Footer />
+    <SuggestPostModal />
 
     <!-- Easter eggs: console greeting + type "pappol" -->
     <script src="/scripts/easter-eggs.js" defer></script>

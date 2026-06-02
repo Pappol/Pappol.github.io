@@ -1,0 +1,282 @@
+---
+// "Suggest a post" modal — a small form that emails the site owner a topic
+// idea via Web3Forms. Pure client-side POST, no backend needed.
+//
+// HOW TO GO LIVE (no backend required):
+//   1. Go to https://web3forms.com and enter the email where you want
+//      suggestions delivered. You'll receive an access key.
+//   2. Paste that key into WEB3FORMS_KEY below.
+// Until a key is set the form runs in DEMO MODE: it shows a success message
+// but sends nothing (mirrors the demo behaviour of EmailSignup.astro).
+const WEB3FORMS_KEY = 'b43ff7d6-dfec-4134-b488-a4de21d5c3ae';
+---
+<dialog id="suggest-dialog" class="suggest-dialog" aria-labelledby="suggest-title">
+  <form
+    class="suggest-form"
+    id="suggest-form"
+    method="dialog"
+    data-demo={WEB3FORMS_KEY ? 'false' : 'true'}
+    novalidate
+  >
+    <div class="suggest-head">
+      <h2 id="suggest-title">Suggest a post</h2>
+      <button
+        type="button"
+        class="suggest-close"
+        data-close-suggest
+        aria-label="Close"
+      >&times;</button>
+    </div>
+
+    <p class="muted suggest-intro">
+      Got an idea you'd like me to write about? Send it over.
+    </p>
+
+    <!-- Web3Forms required + meta fields -->
+    <input type="hidden" name="access_key" value={WEB3FORMS_KEY} />
+    <input type="hidden" name="subject" value="New post suggestion from your blog" />
+    <input type="hidden" name="from_name" value="Blog post suggestion" />
+
+    <!-- Honeypot: real users never see or fill this. -->
+    <input
+      type="checkbox"
+      name="botcheck"
+      class="sr-only"
+      tabindex="-1"
+      autocomplete="off"
+      aria-hidden="true"
+    />
+
+    <div class="field">
+      <label for="suggest-topic">What should I write about?</label>
+      <textarea
+        id="suggest-topic"
+        name="topic"
+        rows="3"
+        placeholder="A topic, a question, something you're stuck on…"
+        required
+      ></textarea>
+    </div>
+
+    <div class="field">
+      <label for="suggest-email">Your email (optional)</label>
+      <input
+        type="email"
+        id="suggest-email"
+        name="email"
+        inputmode="email"
+        autocomplete="email"
+        placeholder="you@example.com"
+      />
+      <p class="suggest-note">
+        Only if you'd like a reply. See the <a href="/privacy">privacy policy</a>.
+      </p>
+    </div>
+
+    <p class="form-msg" id="suggest-msg" role="status" aria-live="polite"></p>
+
+    <div class="suggest-actions">
+      <button type="button" class="btn" data-close-suggest>Cancel</button>
+      <button type="submit" class="btn btn--primary">Send suggestion</button>
+    </div>
+  </form>
+</dialog>
+
+<style>
+  .suggest-dialog {
+    width: min(32rem, calc(100vw - 2rem));
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--text);
+    padding: 1.8rem;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
+  }
+  /* Fade/scale-in using the Pappol motion tokens. */
+  .suggest-dialog[open] {
+    animation: suggest-in var(--t-base) var(--ease-pappol);
+  }
+  @keyframes suggest-in {
+    from { opacity: 0; transform: translateY(8px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .suggest-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+  }
+
+  .suggest-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .suggest-head h2 {
+    margin: 0;
+    font-size: 1.25rem;
+  }
+  .suggest-close {
+    font: inherit;
+    font-size: 1.5rem;
+    line-height: 1;
+    background: none;
+    border: none;
+    padding: 0.1rem 0.3rem;
+    margin: -0.1rem -0.3rem 0 0;
+    color: var(--text-soft);
+    cursor: pointer;
+    transition: color var(--t-fast) var(--ease-pappol);
+  }
+  .suggest-close:hover {
+    color: var(--text);
+  }
+
+  .suggest-intro {
+    margin: 0.3rem 0 1.1rem;
+    font-size: 0.92rem;
+  }
+
+  .suggest-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .field label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .field input,
+  .field textarea {
+    font: inherit;
+    padding: 0.6rem 0.85rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    resize: vertical;
+  }
+  .field input:focus-visible,
+  .field textarea:focus-visible {
+    border-color: var(--text);
+    outline: none;
+  }
+  .suggest-note {
+    margin: 0;
+    font-size: 0.82rem;
+    color: var(--text-soft);
+    line-height: 1.5;
+  }
+
+  .form-msg {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    min-height: 1.2em;
+  }
+  .form-msg.ok { color: var(--text); }
+  .form-msg.err { color: var(--text-soft); }
+
+  .suggest-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 28rem) {
+    .suggest-dialog { padding: 1.4rem; }
+    .suggest-actions .btn { flex: 1 1 auto; }
+  }
+</style>
+
+<script>
+  const dialog = document.getElementById('suggest-dialog') as HTMLDialogElement | null;
+  const form = document.getElementById('suggest-form') as HTMLFormElement | null;
+  const msg = document.getElementById('suggest-msg');
+  const isDemo = form?.dataset.demo === 'true';
+
+  function resetMsg() {
+    if (msg) {
+      msg.textContent = '';
+      msg.className = 'form-msg';
+    }
+  }
+
+  // Open triggers anywhere on the page.
+  document.querySelectorAll('[data-open-suggest]').forEach((el) => {
+    el.addEventListener('click', () => {
+      resetMsg();
+      form?.reset();
+      dialog?.showModal();
+    });
+  });
+
+  // Close buttons (× and Cancel).
+  document.querySelectorAll('[data-close-suggest]').forEach((el) => {
+    el.addEventListener('click', () => dialog?.close());
+  });
+
+  // Close when clicking the backdrop (outside the form). ESC is native.
+  dialog?.addEventListener('click', (e) => {
+    if (e.target === dialog) dialog.close();
+  });
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form || !msg) return;
+
+    const topic = (document.getElementById('suggest-topic') as HTMLTextAreaElement)?.value.trim();
+    const email = (document.getElementById('suggest-email') as HTMLInputElement)?.value.trim();
+
+    if (!topic) {
+      msg.textContent = 'Please tell me what to write about.';
+      msg.className = 'form-msg err';
+      return;
+    }
+    if (email && !/\S+@\S+\.\S+/.test(email)) {
+      msg.textContent = 'That email doesn’t look right — leave it blank or fix it.';
+      msg.className = 'form-msg err';
+      return;
+    }
+
+    const finish = () => {
+      msg.textContent = 'Thanks! Your suggestion is on its way.';
+      msg.className = 'form-msg ok';
+      form.reset();
+      setTimeout(() => dialog?.close(), 1400);
+    };
+
+    if (isDemo) {
+      msg.textContent = 'Thanks! (Demo mode — add a Web3Forms key to go live.)';
+      msg.className = 'form-msg ok';
+      form.reset();
+      setTimeout(() => dialog?.close(), 1400);
+      return;
+    }
+
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { Accept: 'application/json' },
+        body: new FormData(form),
+      });
+      const data = await res.json();
+      if (data.success) {
+        finish();
+      } else {
+        msg.textContent = 'Something went wrong. Please try again.';
+        msg.className = 'form-msg err';
+      }
+    } catch {
+      msg.textContent = 'Something went wrong. Please try again.';
+      msg.className = 'form-msg err';
+    }
+  });
+</script>
