@@ -98,18 +98,12 @@ const hasMore = posts.length > recent.length;
     max-width: 40rem;
   }
   .hero-photo {
-    width: 120px;
-    height: 120px;
+    width: 180px;
+    height: 180px;
     border-radius: 50%;
     object-fit: cover;
     border: 1px solid var(--border);
     margin-bottom: 1.6rem;
-    filter: grayscale(1);
-    transition: filter var(--t-base) var(--ease-pappol);
-  }
-  /* When Pappol mode reveals colour, the photo regains its colour too. */
-  :global(:root.pappol) .hero-photo {
-    filter: grayscale(0);
   }
   .hero h1 {
     margin: 0 0 1.2rem;
