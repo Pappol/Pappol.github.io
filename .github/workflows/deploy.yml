@@ -41,3 +41,40 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  # Email subscribers about any newly *released* post, then record it so it is
+  # never sent twice. Runs only after the site is live. Edits and deletions of
+  # existing posts do not trigger a send — see scripts/send-newsletter.mjs.
+  notify:
+    needs: deploy
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Announce new posts
+        env:
+          MAILERLITE_API_KEY: ${{ secrets.MAILERLITE_API_KEY }}
+          MAILERLITE_GROUP_ID: ${{ secrets.MAILERLITE_GROUP_ID }}
+          MAILERLITE_FROM_EMAIL: ${{ secrets.MAILERLITE_FROM_EMAIL }}
+          MAILERLITE_FROM_NAME: ${{ vars.MAILERLITE_FROM_NAME }}
+          SITE_URL: https://pappol.github.io
+        run: node scripts/send-newsletter.mjs
+      - name: Record sent posts
+        run: |
+          if ! git diff --quiet -- .newsletter/sent.json; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add .newsletter/sent.json
+            git commit -m "chore(newsletter): record sent posts [skip ci]"
+            git push origin HEAD:main
+          else
+            echo "No newsletter state change to commit."
+          fi
