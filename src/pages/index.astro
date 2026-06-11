@@ -23,12 +23,16 @@ const hasMore = posts.length > recent.length;
       height="120"
       loading="eager"
     />
-    <h1>I build the systems between raw data and useful intelligence.</h1>
+    <h1>A small dot in this AI revolution</h1>
     <p class="hero-bio muted">
-      I'm Riccardo — aka {NICKNAME} — an Associate AI &amp; Data Engineer at PwC
-      in Trento. I write about AI engineering, data pipelines, and getting
-      machine learning to behave in production.
+      I'm Riccardo <span class="nickname">{NICKNAME}</span> — Currently an Associate AI &amp; Data Engineer at PwC
+      in Trento. I write about personal experiences, notes, discoveries and personal reflections.
+      I write for myself, but if you find something useful in my writing, that's a nice bonus.
     </p>
+    <div class="disclaimer-chips">
+      <span class="chip">Short reads</span>
+      <span class="chip">Human-written</span>
+    </div>
     <div class="hero-actions">
       <a class="btn btn--primary" href="/blog">Read the blog</a>
       <a class="btn" href={SOCIALS.github} target="_blank" rel="me noopener">GitHub</a>
@@ -125,6 +129,27 @@ const hasMore = posts.length > recent.length;
       flex-direction: column;
       align-items: flex-start;
     }
+  }
+
+  .nickname {
+    opacity: 0.6;
+    font-style: italic;
+  }
+
+  /* Option 2 — inline chips */
+  .disclaimer-chips {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.8rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .chip {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    color: var(--text-soft);
   }
 
   .section-label {
