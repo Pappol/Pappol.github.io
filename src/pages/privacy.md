@@ -58,6 +58,10 @@ If a provider established outside the EU/EEA (for example, a US-based service su
 
 I do **not** sell your personal data, and I do **not** share it with third parties for advertising or marketing purposes. Your data is shared only with the email service provider strictly to deliver the newsletter you subscribed to.
 
+## Analytics
+
+This blog uses **[GoatCounter](https://www.goatcounter.com)** for basic, privacy-friendly visitor statistics (such as how many people view each article and roughly how long they stay). GoatCounter is **cookieless** and does **not** track you across sites or build a personal profile. It does not store personal data such as your IP address; visitors are counted using a temporary, daily-rotating hash that cannot be traced back to you. Because no personal data is collected and no cookies are used, no consent banner is required. You can read GoatCounter's own privacy policy on their website.
+
 ## Your Rights Under GDPR
 
 As a data subject, you have the right to:

@@ -5,6 +5,12 @@ export const SITE_DESCRIPTION =
 export const AUTHOR = 'Riccardo Parola';
 export const NICKNAME = 'Pappol';
 
+// GoatCounter analytics — cookieless, no consent banner needed.
+// Set this to your GoatCounter code (the subdomain you pick at goatcounter.com,
+// e.g. 'pappol' for https://pappol.goatcounter.com). Leave '' to disable tracking
+// entirely (e.g. so local dev / previews don't pollute your stats).
+export const GOATCOUNTER_CODE = 'pappol';
+
 export const SOCIALS = {
   github: 'https://github.com/Pappol',
   linkedin: 'https://www.linkedin.com/in/riccardo--parola',

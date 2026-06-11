@@ -2,7 +2,7 @@
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import SuggestPostModal from '../components/SuggestPostModal.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { SITE_TITLE, SITE_DESCRIPTION, GOATCOUNTER_CODE } from '../consts';
 import '@fontsource-variable/inter';
 import '../styles/global.css';
 
@@ -64,5 +64,16 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 
     <!-- Easter eggs: console greeting + type "pappol" -->
     <script src="/scripts/easter-eggs.js" defer></script>
+
+    {/* GoatCounter: cookieless analytics. Only emitted in production builds and
+        only when a code is configured, so dev/previews don't skew the stats.
+        GoatCounter also ignores localhost requests on its end. */}
+    {GOATCOUNTER_CODE && import.meta.env.PROD && (
+      <script
+        data-goatcounter={`https://${GOATCOUNTER_CODE}.goatcounter.com/count`}
+        async
+        src="//gc.zgo.at/count.js"
+      ></script>
+    )}
   </body>
 </html>
