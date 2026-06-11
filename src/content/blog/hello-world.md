@@ -1,32 +1,20 @@
 ---
 title: "Hello, World (and why I started writing)"
-description: "A short intro to this blog: who I am, what I work on, and why I decided to start writing things down in public."
+description: "Who am I, what is going on, and why am I doing this in the first place?"
 pubDate: 2026-05-26
-tags: ["meta", "writing"]
+tags: ["meta", "writing", "panic"]
 ---
 
-I have written a lot of things over the years that nobody will ever read: internal docs, commit messages, Slack threads that scrolled into oblivion, notes-to-self that I lost track of two laptops ago. This blog is an attempt to point some of that energy somewhere more durable.
+I have never read or written a blog before. I have no idea what I'm doing. But here we are.
 
-## Who is writing this
+I firmly believe that the people that are around you influence you more than you think, and even if not chosen by you, they are still a part of your life. I want to be around people that are doing interesting things, and I want to be able to share what I'm doing with them. So here we are.
 
-I am Riccardo, an AI and data engineer at PwC in Trento. I spend my days somewhere in the messy middle between data pipelines and machine learning models, which means I get to see how often the interesting part of a project is not the model at all, but everything around it.
+I want to make sure it is clear I do not take myself too seriously, and I hope you won't either. This is just a very real stream of consciousness, made in a very dark small living room - kitchen in Trento.
 
-I studied computer science for my bachelor's, then did a master's in artificial intelligence. The gap between what I learned in lectures and what actually ships in production turned out to be wide and full of useful lessons. A lot of those lessons are the kind nobody writes down because they feel too obvious in hindsight.
+This work also is inspired by others'. Real friends of mine that after 8-9 hours of work on writing code (probably not actually writing), still have the energy to do inspiring personal projects. 
 
-## Why write at all
+So who am I to not do the same? 
 
-Three reasons, in honesty order.
+Let me be clear I cannot do what they do. After a day at work the last thing I think about is "Man I really want to build an entire open source personal os so that I can have local personal agents". This is the lazy equivalent. Vibe coding a blog hosted on the free github space and then ranting about how small this AI revolution makes you feel as a developer.
 
-First, writing forces me to actually understand something. It is very easy to feel like I get retrieval-augmented generation or a particular orchestration tool until I try to explain it in plain words and discover the holes.
-
-Second, I keep solving the same problems twice. A blog is a searchable memory I can grep later, and if it helps someone else along the way, even better.
-
-Third, I like the craft of it. Taking a tangled idea and making it clear is satisfying in the same way a clean refactor is.
-
-## What to expect
-
-Mostly practical, hands-on pieces about building things: RAG systems, data engineering, getting ML into production, and the occasional reflection on what this job actually feels like day to day. I will try to keep it concrete. Fewer hot takes, more "here is what broke and what I did about it."
-
-No fixed schedule. I would rather publish something useful occasionally than something forgettable on a calendar.
-
-If you are here, thanks for reading. Let's see where this goes.
+Another mention of honour goes to an ex colleague of mine that I personally look up to that has a blog to which I am a competitor now (but I would cite anyway since it gave me isnpiration for this blog) you can find it [here](https://vigji.github.io/).
