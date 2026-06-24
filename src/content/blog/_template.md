@@ -56,6 +56,26 @@ For a wider caption-style figure you can wrap it in HTML directly in the Markdow
 </figure>
 ```
 
+## Embedding music (Spotify)
+
+To drop in a Spotify player, the post must be **MDX**: save this file with a
+`.mdx` extension instead of `.md` (the frontmatter above is unchanged). Then
+import the component once near the top of the body and use it anywhere:
+
+```mdx
+import MusicEmbed from '../../components/MusicEmbed.astro';
+
+<MusicEmbed url="https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT" caption="What I had on repeat." />
+```
+
+- `url` — any Spotify **Share → Copy link** URL or URI (track, album, playlist,
+  artist, show, or episode).
+- `caption` — optional line of text under the player.
+- `compact={false}` — switch from the slim player to the tall artwork view.
+- `theme="dark"` / `theme="light"` — force a theme (default follows the site).
+
+The player is framed to match the site and follows light/dark automatically.
+
 ## Code blocks
 
 Fenced code blocks with a language hint get syntax highlighting:

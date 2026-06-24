@@ -70,6 +70,37 @@ The URL becomes `/blog/my-post/`. The home page automatically shows the 3 newest
 
 ---
 
+## Embed music in a post (Spotify)
+
+The `<MusicEmbed>` component drops a Spotify player into a post, framed to match
+the site (your border + radius, auto-following light/dark). To use a component the
+post must be **MDX** — save the file as `.mdx` instead of `.md` (everything else
+about the frontmatter is identical; existing `.md` posts are unaffected).
+
+```mdx
+---
+title: "Songs I wrote this to"
+description: "A short note with a soundtrack."
+pubDate: 2026-06-24
+---
+
+import MusicEmbed from '../../components/MusicEmbed.astro';
+
+Here's the track that wouldn't leave my head:
+
+<MusicEmbed url="https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT" caption="Bohemian Rhapsody — Queen" />
+```
+
+- **`url`** (required) — any Spotify share link or URI: a `track`, `album`,
+  `playlist`, `artist`, `show`, or `episode`. In Spotify, use **Share → Copy link**.
+- **`caption`** (optional) — small line of text under the player.
+- **`compact`** (optional, default `true`) — slim one-row player; set
+  `compact={false}` for the tall artwork + tracklist player.
+- **`theme`** (optional, default `"auto"`) — `auto` follows the site theme; force
+  with `"dark"` / `"light"`.
+
+---
+
 ## Things to fill in (search for `TODO`)
 
 - **Your photo** — drop it in `public/images/` and update the `src` in `src/pages/index.astro` (look for `profile-placeholder.svg`). Update the About page too.

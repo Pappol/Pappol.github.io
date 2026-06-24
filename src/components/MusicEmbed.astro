@@ -1,0 +1,146 @@
+---
+// MusicEmbed — a Spotify player framed to match the blog's monochrome design.
+//
+// Usage (in an .mdx post):
+//   import MusicEmbed from '../../components/MusicEmbed.astro';
+//   <MusicEmbed url="https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT" />
+//   <MusicEmbed url="https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M" caption="On repeat while writing this." />
+//
+// Accepts any Spotify share link or URI:
+//   https://open.spotify.com/track/ID        https://open.spotify.com/intl-it/album/ID
+//   spotify:playlist:ID                       (track | album | playlist | artist | show | episode)
+//
+// The player auto-follows the site's light/dark theme via a MutationObserver on
+// <html data-theme>. Spotify exposes exactly two themes: theme=0 (dark, the
+// default) and theme=1 (light) — there is no custom-colour option, so we frame
+// it in our own border/radius to keep it visually coherent.
+
+export interface Props {
+  /** A Spotify share URL or URI. */
+  url: string;
+  /** Optional caption rendered beneath the player. */
+  caption?: string;
+  /** Compact one-row player (default) vs. the tall artwork+tracklist player. */
+  compact?: boolean;
+  /** 'auto' follows the site theme (default); or force 'dark' / 'light'. */
+  theme?: 'auto' | 'dark' | 'light';
+}
+
+const { url, caption, compact = true, theme = 'auto' } = Astro.props;
+
+// Spotify content types that have an embeddable player.
+const TYPES = ['track', 'album', 'playlist', 'artist', 'show', 'episode'];
+
+/** Pull the {type, id} out of a Spotify URL or URI. Returns null if unrecognised. */
+function parseSpotify(input: string): { type: string; id: string } | null {
+  const cleaned = input.trim();
+
+  // URI form: spotify:track:4cOdK2wGLETKBW3PvgPWqT
+  const uri = cleaned.match(/^spotify:([a-z]+):([A-Za-z0-9]+)/);
+  if (uri && TYPES.includes(uri[1])) return { type: uri[1], id: uri[2] };
+
+  // URL form (optionally with an /intl-xx/ locale segment).
+  const urlMatch = cleaned.match(
+    /open\.spotify\.com\/(?:intl-[a-z]+\/)?([a-z]+)\/([A-Za-z0-9]+)/
+  );
+  if (urlMatch && TYPES.includes(urlMatch[1])) {
+    return { type: urlMatch[1], id: urlMatch[2] };
+  }
+
+  return null;
+}
+
+const parsed = parseSpotify(url);
+if (!parsed) {
+  throw new Error(
+    `MusicEmbed: could not parse Spotify URL/URI "${url}". ` +
+      `Expected something like https://open.spotify.com/track/<id> or spotify:track:<id>.`
+  );
+}
+
+// theme=0 dark, theme=1 light. For 'auto' we render the initial value that
+// matches a no-flash dark fallback; the inline script below corrects it to the
+// real site theme before the iframe is meaningfully visible.
+function themeParam(t: Props['theme']): '0' | '1' {
+  return t === 'light' ? '1' : '0';
+}
+
+const base = `https://open.spotify.com/embed/${parsed.type}/${parsed.id}`;
+const initialSrc = `${base}?utm_source=generator&theme=${themeParam(theme)}`;
+
+// Compact = Spotify's slim ~152px player; non-compact = the ~352px tall player.
+// Artists/playlists/albums have no compact variant shorter than 152, so this is
+// a safe baseline that looks consistent across content types.
+const height = compact ? 152 : 352;
+---
+
+<figure class:list={['music-embed', { 'music-embed--compact': compact }]}>
+  <iframe
+    class="music-embed__frame"
+    src={initialSrc}
+    width="100%"
+    height={height}
+    style={`height:${height}px`}
+    frameborder="0"
+    loading="lazy"
+    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+    allowfullscreen
+    data-spotify-base={base}
+    data-spotify-theme={theme}
+    title="Spotify player"></iframe>
+  {caption && <figcaption class="music-embed__caption">{caption}</figcaption>}
+</figure>
+
+{
+  /* Make 'auto' players follow the live site theme. Spotify can't read the
+     parent page, so we swap the iframe src when <html data-theme> changes.
+     Scoped per-instance; the listener is registered once per page load. */
+}
+<script>
+  function syncSpotifyThemes() {
+    const isDark =
+      document.documentElement.getAttribute('data-theme') !== 'light';
+    const frames = document.querySelectorAll<HTMLIFrameElement>(
+      'iframe[data-spotify-theme="auto"]'
+    );
+    frames.forEach((frame) => {
+      const base = frame.getAttribute('data-spotify-base');
+      if (!base) return;
+      const wanted = `${base}?utm_source=generator&theme=${isDark ? '0' : '1'}`;
+      // Only reload the iframe if the theme actually changed.
+      if (frame.src !== wanted) frame.src = wanted;
+    });
+  }
+
+  // Correct the initial render, then watch for theme toggles.
+  syncSpotifyThemes();
+  new MutationObserver(syncSpotifyThemes).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme'],
+  });
+</script>
+
+<style>
+  .music-embed {
+    margin: 1.8rem 0;
+  }
+  .music-embed__frame {
+    display: block;
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-soft);
+    /* Spotify's own player is rounded; clip it to our radius so corners align. */
+    overflow: hidden;
+    transition: border-color var(--t-fast) var(--ease-pappol);
+  }
+  .music-embed__frame:hover {
+    border-color: var(--border-strong);
+  }
+  .music-embed__caption {
+    margin-top: 0.6rem;
+    font-size: 0.88rem;
+    color: var(--text-soft);
+    text-align: center;
+  }
+</style>
